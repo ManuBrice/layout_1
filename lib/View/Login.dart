@@ -103,7 +103,6 @@ class LoginApp extends State<Login>{
                   onPressed: () {
                     print('botón presionado');
                     validarDatos();
-                    clean;
                   },
                   child: Text('entrar'),
                 ),
