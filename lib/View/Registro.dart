@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:crypto/crypto.dart';
+import '../DTO/User.dart';
 
 
 class Registro extends StatefulWidget{
+  final User cadena;
+  Registro(this.cadena);
   @override
   RegistroApp createState() => RegistroApp();
 }
@@ -22,18 +28,34 @@ class RegistroApp extends State<Registro>{
 
   insertarDatos() async{
     try{
+      String hashedPassword = sha256.convert(utf8.encode(password.text)).toString();
       await firebase.collection('Usuarios').doc().set({
         "NombreUsuario": nombre.text,
         "IndentidadUsuario": identificacion.text,
         "EmailUsuario": email.text,
-        "passwordUsuario":password.text
+        "passwordUsuario":hashedPassword,
       });
       print ('Datos guardados');
+      mensaje("informacion", "hola esta registrado");
     }catch(e){
       print('error en insert...........' + e.toString());
     }
   }
-
+  void mensaje(String titulo , String contenido){
+    showDialog(context: context, builder: (buildcontext){
+      return AlertDialog(
+        title: Text(titulo),
+        content: Text(contenido),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            child: Text('Aceptar', style: TextStyle(color: Colors.white),),
+          )
+        ],);
+    });
+  }
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -101,6 +123,10 @@ class RegistroApp extends State<Registro>{
                       //Navigator.push(context, MaterialPageRoute(builder: (context) => Registro()));                  print('botón presionado');
                       //print(nombre.text);
                       insertarDatos();
+                      nombre.clear();
+                      identificacion.clear();
+                      email.clear();
+                      password.clear();
                     },
                     child: Text('Registrar'),
                 ),

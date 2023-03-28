@@ -4,12 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'View/Registro.dart';
 import 'firebase_options.dart';
 import 'View/Login.dart';
+import '../DTO/User.dart';
 
 void main() async{
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(MyApp());
 }
 
@@ -20,7 +23,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp( debugShowCheckedModeBanner: false , home: Home());
   }
 }
-
 class Home extends StatefulWidget {
 
   @override
@@ -29,7 +31,7 @@ class Home extends StatefulWidget {
 }
 
 class HomeStart extends State<Home> {
-
+  User objUser=User();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -39,7 +41,6 @@ class HomeStart extends State<Home> {
         appBar: AppBar(
           title: Text('App Linea 2'),
         ),
-
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,12 +59,12 @@ class HomeStart extends State<Home> {
               padding: EdgeInsets.only(top: 20, left: 10, right: 10),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Registro()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Registro(objUser)));
                   print('botón presionado');
                 },
                 child: Text('Registrar'),
               ),
-            )
+            ),
           ],
           ),
         ),
@@ -71,4 +72,3 @@ class HomeStart extends State<Home> {
     );
   }
 }
-
